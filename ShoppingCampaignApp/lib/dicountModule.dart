@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'discountCampaign.dart';
 import 'productModel.dart';
 
@@ -8,13 +10,16 @@ class DiscountModule{
   double totalPoints = 0;
   double totalSeasonal = 0;
   double totalPriceAfterDiscount = 0;
+  List<Product> discountCart = [];
+
   DiscountModule(List<Product> cartItems, List<Discount> campaigns) {
     applyDiscount(cartItems, campaigns);
   }
   double applyDiscount(List<Product> cartItems, List<Discount> campaigns) {
-    double totalPrice = grandTotal;
+    double totalPrice = calculateGrandTotal(cartItems);
     print("check");
-    print(cartItems);
+    discountCart = CartHelper.deepCopy(cartItems);
+    print(discountCart);
     for (var campaign in campaigns) {
       print(campaign.type);
       print(campaign.value);
@@ -24,30 +29,45 @@ class DiscountModule{
           totalPrice -= campaign.value;
           totalFix = campaign.value;
           break;
+
         case 'PercentageDiscount':
-          totalPrice *= (1 - campaign.value / 100);
-          totalPercentage = totalPrice* (campaign.value /100);
+          double beforeDiscountPrice = totalPrice;
+          for (var item in discountCart ){
+            double discountedPrice  = item.price *  (1 - campaign.value / 100);
+            item.price  = discountedPrice;
+          }
+          totalPrice = calculateGrandTotal(discountCart);
+          totalPercentage = beforeDiscountPrice - totalPrice;
           break;
+
         case 'PercentageDiscountByCategory':
           double beforeDiscountPrice = totalPrice;
-          for (var item in cartItems ){
-            if(item.category == campaign.value['category']){
-              totalPrice -= item.price*(campaign.value['amount'] / 100);
-            }
-            totalPercentageCategory = beforeDiscountPrice - totalPrice;
-
+          double totalDicountPriceFormPresentage= 0;
+          if (discountCart.isEmpty){
+            for (var item in cartItems ){
+              if(item.category == campaign.value['category']){
+                totalPrice -= item.price*(campaign.value['amount'] / 100);
+                totalDicountPriceFormPresentage +=item.price*(campaign.value['amount'] / 100);
+              }
           }
-          break;
-        case 'DiscountByPoints':
-          double limit = totalPrice*0.2;
-          if (campaign.value <= limit){
-            totalPrice -= campaign.value;
-            totalPoints = campaign.value;
           }
           else{
-            totalPrice -= limit;
-            totalPoints = limit;
+            for (var item in discountCart ){
+              if(item.category == campaign.value['category']){
+                totalPrice -= item.price*(campaign.value['amount'] / 100);
+                totalDicountPriceFormPresentage +=item.price*(campaign.value['amount'] / 100);
+              }
           }
+          }
+
+          totalPercentageCategory = totalDicountPriceFormPresentage;
+          break;
+
+        case 'DiscountByPoints':
+          double limit = totalPrice*0.2;
+          double appliedDiscount = min(campaign.value, limit);
+          totalPrice -= appliedDiscount;
+          totalPoints = appliedDiscount;
           break;
         case 'SpecialCampaigns':
           print(campaign.value['everyX']);
@@ -61,6 +81,10 @@ class DiscountModule{
       print("after discount $totalPrice");
     }
     totalPriceAfterDiscount = totalPrice;
+    if (totalPriceAfterDiscount <= 0){
+      print("check");
+      totalPriceAfterDiscount = 0;
+    }
     return totalPrice;
   }
   double getDiscountInfo(Discount discount) {

@@ -2,6 +2,7 @@
 
 import 'package:example9/dicountModule.dart';
 import 'package:example9/discountCampaign.dart';
+import 'package:example9/widgets/diaglogBox.dart';
 import 'package:flutter/material.dart';
 import 'productModel.dart';
 import 'package:collection/collection.dart';
@@ -25,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   int? _seasonalTypeSelect = null;
   TextEditingController _fixAmountController = TextEditingController();
   TextEditingController _percentageDiscountController = TextEditingController();
-  TextEditingController _categoryDiscountController = TextEditingController();
+  String _categoryDiscountController = 'Clothing';
   TextEditingController _percentageDiscountAmountController = TextEditingController();
   TextEditingController _customerPointController = TextEditingController();
   TextEditingController _everyXController = TextEditingController();
@@ -65,6 +66,7 @@ class _HomePageState extends State<HomePage> {
 
                           setState(() {
                             addProductToCart(products[index]);
+                            discountModule.applyDiscount(cart, discounts);
                           });
                         },
                         child: Stack(
@@ -101,6 +103,9 @@ class _HomePageState extends State<HomePage> {
                     flex: 4,
                     child: Column(
                       children: [
+                        SizedBox(
+                                height: 10,
+                              ),
                         Text("Coupon campaign"),
                         Divider(),
                         Row(
@@ -132,6 +137,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ],
                         ),
+                        SizedBox(height: 10,),
                         Visibility(
                           visible: _couponTypeSelect == 0,
                           child: TextField(
@@ -152,6 +158,9 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
+                        SizedBox(
+                                height: 10,
+                              ),
                         Text("On-Top campaign"),
                         Divider(),
                         Row(
@@ -183,19 +192,30 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ],
                         ),
+                        SizedBox(height: 10,),
                         Visibility(
                           visible: _onTopTypeSelect == 0,
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              DropdownButton(
+                                  value: _categoryDiscountController, //selected option
+                                  icon: Icon(Icons.arrow_downward_rounded),
+                                  onChanged: ( newVal) {
+                                    setState(() {
+                                      _categoryDiscountController = newVal ?? 'Clothing'; // Set a default value if newVal is null
+                                    });
+                                  },
+                                  items: [
+                                    for (String category in ['Clothing', 'Accessories', 'Electronics'])
+                                      DropdownMenuItem(
+                                        value: category,
+                                        child: Text(category),
+                                      ),
+                                  ],
+                              ),
                               SizedBox(
-                                width: 150,
-                                child: TextField(
-                                  controller: _categoryDiscountController,
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: 'Enter Category',
-                                  ),
-                                ),
+                                width: 30,
                               ),
                               SizedBox(
                                 width: 150,
@@ -210,6 +230,7 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
+                        SizedBox(height: 10,),
                         Visibility(
                           visible: _onTopTypeSelect == 1,
                           child: TextField(
@@ -220,6 +241,9 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
+                        SizedBox(
+                                height: 10,
+                              ),
                         Text("Seasonal campaign"),
                         Divider(),
                         Row(
@@ -249,9 +273,11 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ],
                         ),
+                        SizedBox(height: 10,),
                         Visibility(
                           visible: _seasonalTypeSelect == 0,
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SizedBox(
                                 width: 150,
@@ -262,6 +288,9 @@ class _HomePageState extends State<HomePage> {
                                     labelText: 'Enter EveryX',
                                   ),
                                 ),
+                              ),
+                              SizedBox(
+                                width: 20,
                               ),
                               SizedBox(
                                 width: 150,
@@ -308,12 +337,12 @@ class _HomePageState extends State<HomePage> {
                         }
                         if (_onTopTypeSelect == 0 ){
                           try {
-                            String category= _categoryDiscountController.text;
+                            String category= _categoryDiscountController;
                             double percentage = double.parse(_percentageDiscountAmountController.text);
                             discounts.add(Discount(type: 'PercentageDiscountByCategory', value: {'category':category, 'amount':percentage}, apply: true));
                           } catch (e) {
                             print('Invalid input: ${_percentageDiscountAmountController.text}');
-                            print('Invalid input: ${_categoryDiscountController.text}');
+                            print('Invalid input: ${_categoryDiscountController}');
 
                           }
                          
@@ -330,7 +359,12 @@ class _HomePageState extends State<HomePage> {
                           try {
                           double x = double.parse(_everyXController.text);
                           double y = double.parse(_discountYController.text);
-                          discounts.add(Discount(type: 'SpecialCampaigns', value: {'everyX': x  ,'discountY':y}, apply: true));
+                          if (x>y){
+                             discounts.add(Discount(type: 'SpecialCampaigns', value: {'everyX': x  ,'discountY':y}, apply: true));
+                          }
+                          else {
+                            CustomAlertDialog(content: 'test',title: "test2");
+                          }
                           } catch (e) {
                             print('Invalid input: ${_everyXController.text}');
                             print('Invalid input: ${_discountYController.text}');
@@ -382,7 +416,7 @@ class _HomePageState extends State<HomePage> {
                               flex: 1,
                               child: Container(
                                   alignment: Alignment.center,
-                                  child: Text("Item Total")))
+                                  child: Text("Amount")))
                         ],
                       )),
                   const Divider(
@@ -427,7 +461,9 @@ class _HomePageState extends State<HomePage> {
                                                         setState(() {
                                                           addProductToCart(
                                                               cart[index]);
-                                                        });
+                                                          discountModule.applyDiscount(cart, discounts);
+                                                        }
+                                                        );
                                                       },
                                                     ),
                                                   ),
@@ -438,6 +474,7 @@ class _HomePageState extends State<HomePage> {
                                                         setState(() {
                                                           removeProductFromCart(
                                                               cart[index]);
+                                                          discountModule.applyDiscount(cart, discounts);
                                                         });
                                                       },
                                                       color: Colors.black54,
@@ -491,7 +528,8 @@ class _HomePageState extends State<HomePage> {
                           );
                         },
                       )),
-                      Text("Sub total $grandTotal"),
+                      Divider(color: Colors.black45,),
+                      Expanded(flex :1 , child: Text("Sub total ${calculateGrandTotal(cart)}")),
                   Visibility( //discount part
                     visible: discounts.isNotEmpty,
                     child: Expanded(
@@ -504,9 +542,9 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   Row(
                                     children: [
-                                      Text("${discounts[index].type}"),
-                                      Text("${discounts[index].value}"),
-                                      Text("${discountModule.getDiscountInfo(discounts[index])}"),
+                                      Text("${discounts[index].type} discount ${discountModule.getDiscountInfo(discounts[index])} THB"),
+                                      //Text("${discounts[index].value}"),
+                                      //Text("${discountModule.getDiscountInfo(discounts[index])}"),
                                     ],
                                   ),
                                   //Text("${discounts[index].type} every ${discounts[index].value['everyX']} THB discount ${discounts[index].value['discountY']} THB "),
@@ -545,7 +583,6 @@ class _HomePageState extends State<HomePage> {
     } else {
       check.qty += 1;
     }
-    grandTotal += product.price;
   } //ef
 } //ec
 
@@ -555,7 +592,6 @@ removeProductFromCart(Product product) {
   } else {
     product.qty -= 1;
   }
-  grandTotal -= product.price;
 }
 
 

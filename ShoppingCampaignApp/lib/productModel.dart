@@ -17,15 +17,15 @@ class Product {
 
 List<Product> products = [
   Product(
-      id: 1, name: "T-Shirt",category: "Clothing", qty: 1, price: 350, picture: "images/food1.jpeg"),
+      id: 1, name: "T-Shirt",category: "Clothing", qty: 1, price: 350, picture: "../images/t-shirt.jpeg"),
   Product(
-      id: 2, name: "Hat",category: "Clothing", qty: 1, price: 250, picture: "images/food2.jpeg"),
+      id: 2, name: "Hat",category: "Clothing", qty: 1, price: 250, picture: "../images/hat.jpeg"),
   Product(
-      id: 3, name: "Watch",category: "Accessories", qty: 1, price: 850, picture: "images/food3.jpeg"),
+      id: 3, name: "Watch",category: "Accessories", qty: 1, price: 850, picture: "../images/watch.png"),
   Product(
-      id: 4, name: "Bag",category: "Accessories", qty: 1, price: 640, picture: "images/food4.jpeg"),
+      id: 4, name: "Bag",category: "Accessories", qty: 1, price: 640, picture: "../images/bag.jpeg"),
   Product(
-      id: 5, name: "Printer",category: "Electronics", qty: 1, price: 1500, picture: "images/food4.jpeg"),
+      id: 5, name: "Printer",category: "Electronics", qty: 1, price: 1500, picture: "../images/printer.png"),
   
 ];
 
@@ -33,4 +33,25 @@ List<Product> products = [
 List<Product> cart = [
 ];
 
-double grandTotal = 0;
+double calculateGrandTotal(List<Product> cart) {
+  return cart.fold(0, (sum, item) => sum + item.price);
+}
+
+double grandTotal = calculateGrandTotal(cart);
+
+class CartHelper {
+  static List<Product> deepCopy(List<Product> original) {
+    List<Product> copy = [];
+    for (var item in original) {
+      copy.add(Product(
+        id: item.id,
+        name: item.name,
+        category: item.category,
+        qty: item.qty,
+        price: item.price,
+        picture: item.picture,
+      ));
+    }
+    return copy;
+  }
+}
