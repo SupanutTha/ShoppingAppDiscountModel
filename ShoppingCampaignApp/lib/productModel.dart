@@ -34,7 +34,7 @@ List<Product> cart = [
 ];
 
 double calculateGrandTotal(List<Product> cart) {
-  return cart.fold(0, (sum, item) => sum + item.price);
+  return cart.fold(0, (sum, item) => sum + (item.price * item.qty));
 }
 
 double grandTotal = calculateGrandTotal(cart);

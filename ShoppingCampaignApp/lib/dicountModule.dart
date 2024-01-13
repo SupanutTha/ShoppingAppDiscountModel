@@ -42,12 +42,12 @@ class DiscountModule{
 
         case 'PercentageDiscountByCategory':
           double beforeDiscountPrice = totalPrice;
-          double totalDicountPriceFormPresentage= 0;
+          double totalDiscountPriceFormPercentage= 0;
           if (discountCart.isEmpty){
             for (var item in cartItems ){
               if(item.category == campaign.value['category']){
                 totalPrice -= item.price*(campaign.value['amount'] / 100);
-                totalDicountPriceFormPresentage +=item.price*(campaign.value['amount'] / 100);
+                totalDiscountPriceFormPercentage +=item.price* item.qty * (campaign.value['amount'] / 100);
               }
           }
           }
@@ -55,12 +55,12 @@ class DiscountModule{
             for (var item in discountCart ){
               if(item.category == campaign.value['category']){
                 totalPrice -= item.price*(campaign.value['amount'] / 100);
-                totalDicountPriceFormPresentage +=item.price*(campaign.value['amount'] / 100);
+                totalDiscountPriceFormPercentage +=item.price* item.qty*(campaign.value['amount'] / 100);
               }
           }
           }
 
-          totalPercentageCategory = totalDicountPriceFormPresentage;
+          totalPercentageCategory = totalDiscountPriceFormPercentage;
           break;
 
         case 'DiscountByPoints':

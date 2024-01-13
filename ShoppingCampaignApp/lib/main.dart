@@ -21,14 +21,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //FIXME: rename variable
   int? _couponTypeSelect = null;
   int? _onTopTypeSelect = null;
   int? _seasonalTypeSelect = null;
   TextEditingController _fixAmountController = TextEditingController();
   TextEditingController _percentageDiscountController = TextEditingController();
+  //FIXME: remove this line
   String _categoryDiscountController = 'Clothing';
   TextEditingController _percentageDiscountAmountController = TextEditingController();
   TextEditingController _customerPointController = TextEditingController();
+  //FIXME: naming
   TextEditingController _everyXController = TextEditingController();
   TextEditingController _discountYController = TextEditingController();
   
@@ -124,11 +127,11 @@ class _HomePageState extends State<HomePage> {
                                     selected: _couponTypeSelect == index,
                                     onSelected: (bool selected) {
                                       setState(() {
-                                        _couponTypeSelect = selected
-                                            ? (_couponTypeSelect == index
-                                                ? null
-                                                : index)
-                                            : null;
+                                        if(_couponTypeSelect == index) {
+                                          _couponTypeSelect = null;
+                                        } else {
+                                          _couponTypeSelect = index;
+                                        }
                                       });
                                     },
                                   );
@@ -139,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         SizedBox(height: 10,),
                         Visibility(
-                          visible: _couponTypeSelect == 0,
+                          visible: _couponTypeSelect != null,
                           child: TextField(
                             controller:  _fixAmountController,
                             decoration: InputDecoration(
@@ -207,6 +210,7 @@ class _HomePageState extends State<HomePage> {
                                     });
                                   },
                                   items: [
+                                    //FIXME: ProductCategory
                                     for (String category in ['Clothing', 'Accessories', 'Electronics'])
                                       DropdownMenuItem(
                                         value: category,
@@ -260,6 +264,7 @@ class _HomePageState extends State<HomePage> {
                                     selected: _seasonalTypeSelect == index,
                                     onSelected: (bool selected) {
                                       setState(() {
+                                        //FIXME: refactor
                                         _seasonalTypeSelect = selected
                                             ? (_seasonalTypeSelect == index
                                                 ? null
@@ -285,6 +290,7 @@ class _HomePageState extends State<HomePage> {
                                   controller: _everyXController,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
+                                    //FIXME:
                                     labelText: 'Enter EveryX',
                                   ),
                                 ),
@@ -298,6 +304,7 @@ class _HomePageState extends State<HomePage> {
                                   controller: _discountYController,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
+                                    //FIXME:
                                     labelText: 'Enter Discount Y',
                                   ),
                                 ),
@@ -317,9 +324,11 @@ class _HomePageState extends State<HomePage> {
                       child: const Text('apply discount'),
                       onPressed: () {
                         discounts.clear();
+                        //FIXME: separate function
                         if (_couponTypeSelect == 0 ){
                           try {
                             double value = double.parse(_fixAmountController.text);
+                            //FIXME:
                             discounts.add(Discount(type: 'FixedAmount', value: value, apply: true));
 
                           } catch (e) {
@@ -329,6 +338,7 @@ class _HomePageState extends State<HomePage> {
                         else if (_couponTypeSelect == 1 ){
                           try {
                             double value = double.parse(_percentageDiscountController.text);
+                            //FIXME:
                             discounts.add(Discount(type: 'PercentageDiscount', value: value, apply: true));
 
                           } catch (e) {
@@ -339,6 +349,7 @@ class _HomePageState extends State<HomePage> {
                           try {
                             String category= _categoryDiscountController;
                             double percentage = double.parse(_percentageDiscountAmountController.text);
+                            //FIXME:
                             discounts.add(Discount(type: 'PercentageDiscountByCategory', value: {'category':category, 'amount':percentage}, apply: true));
                           } catch (e) {
                             print('Invalid input: ${_percentageDiscountAmountController.text}');
@@ -355,6 +366,7 @@ class _HomePageState extends State<HomePage> {
                             print('Invalid input: ${_customerPointController.text}');
                           }
                         }
+
                         if (_seasonalTypeSelect == 0 ){
                           try {
                           double x = double.parse(_everyXController.text);
