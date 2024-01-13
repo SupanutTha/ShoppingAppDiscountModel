@@ -41,10 +41,14 @@ String subDiscountTypeTitle ( SubDiscountType subType){
 
 class Discount {
   final DiscountType type;
+  final SubDiscountType subType;
+  final value;
   final bool apply;
 
   Discount({
     required this.type,
+    required this.subType,
+    required this.value,
     required this.apply
   });
 }

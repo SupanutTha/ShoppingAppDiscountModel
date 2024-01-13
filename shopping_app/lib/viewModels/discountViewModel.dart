@@ -10,39 +10,44 @@ class DiscountViewModel {
   double totalPoints = 0;
   double totalSeasonal = 0;
   double totalPriceAfterDiscount = 0;
-  List<Product> discountCart = [];
+  List<Product> checkoutCart = [];
+  List<Discount> campaignApply = [];
 
-  var discountViewModel = DiscountViewModel();
+  ProductViewModel productViewModel = ProductViewModel();
 
-  double applyDiscount(List<Product> cartItems, List<Discount> campaigns) {
-    double totalPrice = calculateGrandTotal(cartItems);
-    print("check");
-    discountCart = deepCopy(cartItems);
-    print(discountCart);
-    for (var campaign in campaigns) {
+  double applyDiscount(List<Product> cartItems, List<Discount> campaignList) {
+    print("test cast in discount : $cartItems");
+    checkoutCart = productViewModel.deepCopy(cartItems);
+    print("test cast in deep copy discount : $cartItems");
+    double totalPrice = productViewModel.calculateGrandTotal(checkoutCart);
+    print(" total price = $totalPrice");
+    
+    
+    for (var campaign in campaignList) {
       print(campaign.type);
       print(campaign.value);
       print(totalPrice);
-      switch (campaign.type) {
-        case 'FixedAmount':
+
+      switch (campaign.subType) {
+        case SubDiscountType.fixed:
           totalPrice -= campaign.value;
           totalFix = campaign.value;
           break;
 
-        case 'PercentageDiscount':
+        case SubDiscountType.percentage:
           double beforeDiscountPrice = totalPrice;
-          for (var item in discountCart) {
+          for (var item in checkoutCart) {
             double discountedPrice = item.price * (1 - campaign.value / 100);
             item.price = discountedPrice;
           }
-          totalPrice = calculateGrandTotal(discountCart);
+          totalPrice = productViewModel.calculateGrandTotal(checkoutCart);
           totalPercentage = beforeDiscountPrice - totalPrice;
           break;
 
-        case 'PercentageDiscountByCategory':
+        case SubDiscountType.percentageByCategory:
           double beforeDiscountPrice = totalPrice;
           double totalDiscountPriceFormPercentage = 0;
-          if (discountCart.isEmpty) {
+          if (checkoutCart.isEmpty) {
             for (var item in cartItems) {
               if (item.category == campaign.value['category']) {
                 totalPrice -=
@@ -52,7 +57,7 @@ class DiscountViewModel {
               }
             }
           } else {
-            for (var item in discountCart) {
+            for (var item in checkoutCart) {
               if (item.category == campaign.value['category']) {
                 totalPrice -=
                     item.price * (campaign.value['amount'] / 100);
@@ -65,13 +70,13 @@ class DiscountViewModel {
           totalPercentageCategory = totalDiscountPriceFormPercentage;
           break;
 
-        case 'DiscountByPoints':
+        case SubDiscountType.points:
           double limit = totalPrice * 0.2;
           double appliedDiscount = min(campaign.value, limit);
           totalPrice -= appliedDiscount;
           totalPoints = appliedDiscount;
           break;
-        case 'SpecialCampaigns':
+        case SubDiscountType.special:
           print(campaign.value['everyX']);
           print(campaign.value['discountY']);
           print(totalPrice % campaign.value['everyX']);
@@ -83,10 +88,10 @@ class DiscountViewModel {
       print("after discount $totalPrice");
     }
     totalPriceAfterDiscount = totalPrice;
-    if (totalPriceAfterDiscount <= 0) {
-      print("check");
-      totalPriceAfterDiscount = 0;
-    }
+    // if (totalPriceAfterDiscount <= 0) {
+    //   print("check");
+    //   totalPriceAfterDiscount = 0;
+    // }
     return totalPrice;
   }
 

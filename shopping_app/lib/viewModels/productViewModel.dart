@@ -9,47 +9,49 @@ class ProductViewModel {
         category: ProductCategory.clothing,
         qty: 1,
         price: 350,
-        picture: "../images/t-shirt.jpeg"),
+        image: "../images/t-shirt.jpeg"),
     Product(
         id: 2,
         name: "Hat",
         category: ProductCategory.clothing,
         qty: 1,
         price: 250,
-        picture: "../images/hat.jpeg"),
+        image: "../images/hat.jpeg"),
     Product(
         id: 3,
         name: "Watch",
         category: ProductCategory.accessories,
         qty: 1,
         price: 850,
-        picture: "../images/watch.png"),
+        image: "../images/watch.png"),
     Product(
         id: 4,
         name: "Bag",
         category: ProductCategory.accessories,
         qty: 1,
         price: 640,
-        picture: "../images/bag.jpeg"),
+        image: "../images/bag.jpeg"),
     Product(
         id: 5,
         name: "Printer",
         category: ProductCategory.electronics,
         qty: 1,
         price: 1500,
-        picture: "../images/printer.png"),
+        image: "../images/printer.png"),
   ];
 
-  List<Product> _cart = [];
+  List<Product> userCart = [];
 
   double calculateGrandTotal(List<Product> cartItems) {
-    return _cart.fold(0, (sum, item) => sum + (item.price * item.qty));
+    print("test cart $cartItems");
+    print('test : ${cartItems.fold(0.0, (sum, item) => sum + (item.price * item.qty))}');
+    return cartItems.fold(0.0, (sum, item) => sum + (item.price * item.qty));
   }
 
   void addProductToCart(Product product) {
-    var check = _cart.firstWhereOrNull((p) => p.id == product.id);
+    var check = userCart.firstWhereOrNull((p) => p.id == product.id);
     if (check == null) {
-      _cart.add(product);
+      userCart.add(product);
       //print(cart);
     } else {
       check.qty += 1;
@@ -58,14 +60,14 @@ class ProductViewModel {
 
   void removeFromCart(Product product) {
     if (product.qty - 1 == 0) {
-      _cart.remove(product);
+      userCart.remove(product);
     } else {
       product.qty -= 1;
     }
   }
 
   void clearCart() {
-    _cart.clear();
+    userCart.clear();
   }
 
   List<Product> deepCopy(List<Product> original) {
@@ -77,7 +79,7 @@ class ProductViewModel {
         category: item.category,
         qty: item.qty,
         price: item.price,
-        picture: item.picture,
+        image: item.image,
       ));
     }
     return copy;

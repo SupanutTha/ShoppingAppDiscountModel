@@ -24,7 +24,7 @@ class Product {
   String name;
   int qty;
   double price;
-  String picture;
+  String image;
   ProductCategory category;
   Product({
     required this.id,
@@ -32,7 +32,7 @@ class Product {
     required this.category,
     required this.qty,
     required this.price,
-    required this.picture,
+    required this.image,
   });
 }
 
@@ -43,7 +43,7 @@ List<Product> products = [
     category: ProductCategory.clothing,
     qty: 1,
     price: 350,
-    picture: "../images/t-shirt.jpeg",
+    image: "../images/t-shirt.jpeg",
   ),
   Product(
     id: 2,
@@ -51,7 +51,7 @@ List<Product> products = [
     category: ProductCategory.clothing,
     qty: 1,
     price: 250,
-    picture: "../images/hat.jpeg",
+    image: "../images/hat.jpeg",
   ),
   Product(
     id: 3,
@@ -59,7 +59,7 @@ List<Product> products = [
     category: ProductCategory.accessories,
     qty: 1,
     price: 850,
-    picture: "../images/watch.png",
+    image: "../images/watch.png",
   ),
   Product(
     id: 4,
@@ -67,7 +67,7 @@ List<Product> products = [
     category: ProductCategory.accessories,
     qty: 1,
     price: 640,
-    picture: "../images/bag.jpeg",
+    image: "../images/bag.jpeg",
   ),
   Product(
     id: 5,
@@ -75,6 +75,6 @@ List<Product> products = [
     category: ProductCategory.electronics,
     qty: 1,
     price: 1500,
-    picture: "../images/printer.png",
+    image: "../images/printer.png",
   ),
 ];
