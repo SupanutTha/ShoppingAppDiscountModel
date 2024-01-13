@@ -17,12 +17,10 @@ class DiscountViewModel {
 
   double applyDiscount(List<Product> cartItems, List<Discount> campaignList) {
     print("test cast in discount : $cartItems");
-    checkoutCart = productViewModel.deepCopy(cartItems);
-    print("test cast in deep copy discount : $cartItems");
-    double totalPrice = productViewModel.calculateGrandTotal(checkoutCart);
+    double totalPrice = productViewModel.calculateGrandTotal(cartItems);
     print(" total price = $totalPrice");
     
-    
+    checkoutCart = productViewModel.deepCopy(cartItems);
     for (var campaign in campaignList) {
       print(campaign.type);
       print(campaign.value);
@@ -88,24 +86,24 @@ class DiscountViewModel {
       print("after discount $totalPrice");
     }
     totalPriceAfterDiscount = totalPrice;
-    // if (totalPriceAfterDiscount <= 0) {
-    //   print("check");
-    //   totalPriceAfterDiscount = 0;
-    // }
+    if (totalPriceAfterDiscount <= 0) {
+      print("check");
+      totalPriceAfterDiscount = 0;
+    }
     return totalPrice;
   }
 
   double getDiscountInfo(Discount discount) {
-    switch (discount.type) {
-      case 'FixedAmount':
+    switch (discount.subType) {
+      case SubDiscountType.fixed:
         return totalFix;
-      case 'PercentageDiscount':
+      case SubDiscountType.percentage:
         return totalPercentage;
-      case 'PercentageDiscountByCategory':
+      case SubDiscountType.percentageByCategory:
         return totalPercentageCategory;
-      case 'DiscountByPoints':
+      case SubDiscountType.points:
         return totalPoints;
-      case 'SpecialCampaigns':
+      case SubDiscountType.special:
         return totalSeasonal;
       default:
         return 0;
