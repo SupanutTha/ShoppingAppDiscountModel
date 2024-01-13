@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _fixAmountController = TextEditingController();
   final TextEditingController _percentageDiscountController = TextEditingController();
   //FIXME: remove this line
-  String _selectedCategoryForDiscount = 'Clothing';
+  ProductCategory? _selectedCategoryForDiscount;
   final TextEditingController _percentageDiscountAmountController = TextEditingController();
   final TextEditingController _customerPointController = TextEditingController();
   //FIXME: naming
@@ -209,15 +209,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                   icon: Icon(Icons.arrow_downward_rounded),
                                   onChanged: ( newVal) {
                                     setState(() {
-                                      _selectedCategoryForDiscount = newVal ?? 'Clothing'; // Set a default value if newVal is null
+                                      _selectedCategoryForDiscount = newVal ; // Set a default value if newVal is null
                                     });
                                   },
                                   items: [
                                     //FIXME: ProductCategory
-                                    for (String category in ['Clothing', 'Accessories', 'Electronics'])
-                                      DropdownMenuItem(
+                                    DropdownMenuItem<ProductCategory>(
+                                      value: null,
+                                      child: Text('Select the category'),
+                                    ),
+                                    for (ProductCategory category in ProductCategory.values)
+                                      DropdownMenuItem<ProductCategory>(
                                         value: category,
-                                        child: Text(category),
+                                        child: Text(categoryTitle(category)),
                                       ),
                                   ],
                               ),
@@ -352,10 +356,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         }
                         if (_selectedOnTopType == 0 ){
                           try {
-                            String category= _selectedCategoryForDiscount;
+                            //ProductCategory category= _selectedCategoryForDiscount;
                             double percentage = double.parse(_percentageDiscountAmountController.text);
                             //FIXME:
-                            discountModule.campaignApply.add(Discount(type: DiscountType.onTop, subType: SubDiscountType.percentageByCategory, value: {'category':category, 'amount':percentage}, apply: true));
+                            discountModule.campaignApply.add(Discount(type: DiscountType.onTop, subType: SubDiscountType.percentageByCategory, value: {'category':_selectedCategoryForDiscount, 'amount':percentage}, apply: true));
                           } catch (e) {
                             print('Invalid input: ${_percentageDiscountAmountController.text}');
                             print('Invalid input: ${_selectedCategoryForDiscount}');
