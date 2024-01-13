@@ -13,8 +13,6 @@ String categoryTitle(ProductCategory category) {
       return "Accessories";
     case ProductCategory.electronics:
       return "Electronics";
-    default:
-      return "Unknown";
   }
 }
 

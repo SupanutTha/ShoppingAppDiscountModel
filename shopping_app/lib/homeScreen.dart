@@ -299,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
                                     //FIXME:
-                                    labelText: 'Enter EveryX',
+                                    labelText: 'Enter Campaign Threshold',
                                   ),
                                 ),
                               ),
@@ -313,7 +313,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
                                     //FIXME:
-                                    labelText: 'Enter Discount Y',
+                                    labelText: 'Enter Discount',
                                   ),
                                 ),
                               ),
@@ -381,7 +381,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           double x = double.parse(_specialCampaignThresholdController.text);
                           double y = double.parse(_specialCampaignFixedDiscountController.text);
                           if (x>y){
-                            discountModule.campaignApply.add(Discount(type: DiscountType.seasonal, subType: SubDiscountType.special, value: {'everyX': x  ,'discountY':y}, apply: true));
+                            discountModule.campaignApply.add(Discount(type: DiscountType.seasonal, subType: SubDiscountType.special, value: {'specialCampaignThreshold': x  ,'specialCampaignFixedDiscount':y}, apply: true));
 
                             //discounts.add(Discount(type: 'SpecialCampaigns', value: {'everyX': x  ,'discountY':y}, apply: true));
                           }
