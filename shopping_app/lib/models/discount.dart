@@ -1,31 +1,30 @@
 enum DiscountType {
   coupon,
   onTop,
-  seasonal,
-}
+  seasonal;
 
-String discountTypeTitle (DiscountType type){
-  switch(type){
-    case DiscountType.coupon:
+  String get title {
+    switch(this){
+      case DiscountType.coupon:
       return "Coupon Campaign";
     case DiscountType.onTop:
       return "On Top Campaign";
     case DiscountType.seasonal:
       return "Seasonal Campaign";
     }
-      
   }
+}
+
 
 enum SubDiscountType {
   fixed,
   percentage,
   percentageByCategory,
   points,
-  special
-}
-
-String subDiscountTypeTitle ( SubDiscountType subType){
-  switch(subType){
+  special;
+  
+  String get title{
+    switch(this){
     case SubDiscountType.fixed:
       return "Fixed Amount";
     case SubDiscountType.percentage:
@@ -36,7 +35,29 @@ String subDiscountTypeTitle ( SubDiscountType subType){
       return "Discount By Points";
     case SubDiscountType.special:
       return "Special Campaign";
+   }
+  }  
+}
+
+enum SpecialDiscountValue{
+  category,
+  amount,
+  specialCampaignThreshold,
+  specialCampaignFixedDiscount;
+
+  String get title{
+    switch(this){
+      case SpecialDiscountValue.category:
+        return "category";
+      case SpecialDiscountValue.amount:
+        return "amount";
+      case SpecialDiscountValue.specialCampaignThreshold:
+        return "Special Campaign Threshold";
+      case SpecialDiscountValue.specialCampaignFixedDiscount:
+        return "special Campaign Fixed Discount";
+    }
   }
+
 }
 
 class Discount {

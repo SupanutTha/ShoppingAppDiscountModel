@@ -1,12 +1,10 @@
 enum ProductCategory {
   clothing,
   accessories,
-  electronics,
+  electronics;
 
-}
-
-String categoryTitle(ProductCategory category) {
-  switch (category) {
+  String get title{
+    switch (this) {
     case ProductCategory.clothing:
       return "Clothing";
     case ProductCategory.accessories:
@@ -14,8 +12,8 @@ String categoryTitle(ProductCategory category) {
     case ProductCategory.electronics:
       return "Electronics";
   }
+  }
 }
-
 
 class Product {
   int id;

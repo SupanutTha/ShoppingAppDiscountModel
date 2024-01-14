@@ -34,28 +34,6 @@ class DiscountViewModel {
           break;
 
         case SubDiscountType.percentageByCategory:
-          // double beforeDiscountPrice = totalPrice;
-          // double totalDiscountPriceFormPercentage = 0;
-          // if (checkoutCart.isEmpty) {
-          //   for (var item in cartItems) {
-          //     if (item.category == campaign.value['category']) {
-          //       totalPrice -=
-          //           item.price * (campaign.value['amount'] / 100);
-          //       totalDiscountPriceFormPercentage +=
-          //           item.price * item.qty * (campaign.value['amount'] / 100);
-          //     }
-          //   }
-          // } else {
-          //   for (var item in checkoutCart) {
-          //     if (item.category == campaign.value['category']) {
-          //       totalPrice -=
-          //           item.price * (campaign.value['amount'] / 100);
-          //       totalDiscountPriceFormPercentage +=
-          //           item.price * item.qty * (campaign.value['amount'] / 100);
-          //     }
-          //   }
-          // }
-          // totalPercentageCategory = totalDiscountPriceFormPercentage;
           totalPrice = applyPercentageByCategoryDiscount(campaign, totalPrice, cartItems);
           break;
 
@@ -67,11 +45,9 @@ class DiscountViewModel {
           totalPrice = applySpecialDiscount(campaign,totalPrice);
           break;
       }
-      print("after discount $totalPrice");
     }
     totalPriceAfterDiscount = totalPrice;
     if (totalPriceAfterDiscount <= 0) {
-      print("check");
       totalPriceAfterDiscount = 0;
     }
     return totalPrice;
@@ -99,25 +75,16 @@ class DiscountViewModel {
   double applyPercentageByCategoryDiscount(Discount campaign, double totalPrice, List<Product> cartItems) {
     double totalDiscountPriceFormPercentage = 0;
 
-    if (checkoutCart.isEmpty) {
-      for (var item in cartItems) {
-        print(campaign.value['category']);
-        if (item.category == campaign.value['category']) {
-          totalPrice -= item.price * (campaign.value['amount'] / 100);
-          totalDiscountPriceFormPercentage +=
-              item.price * item.qty * (campaign.value['amount'] / 100);
-        }
-      }
-    } else {
+
       for (var item in checkoutCart) {
-         print(campaign.value['category']);
-        if (item.category == campaign.value['category']) {
-          totalPrice -= item.price * (campaign.value['amount'] / 100);
+         print(campaign.value[SpecialDiscountValue.category]);
+        if (item.category == campaign.value[SpecialDiscountValue.category]) {
+          totalPrice -= item.price * (campaign.value[SpecialDiscountValue.amount] / 100);
           totalDiscountPriceFormPercentage +=
-              item.price * item.qty * (campaign.value['amount'] / 100);
+              item.price * item.qty * (campaign.value[SpecialDiscountValue.amount] / 100);
         }
       }
-    }
+    
 
     totalPercentageCategory = totalDiscountPriceFormPercentage;
     return totalPrice;
@@ -133,9 +100,9 @@ class DiscountViewModel {
   }
 
   double applySpecialDiscount(Discount campaign, double totalPrice) {
-    int discountTime = totalPrice ~/ campaign.value['everyX'];
-    totalPrice -= discountTime * campaign.value['discountY'];
-    totalSeasonal = discountTime * campaign.value['discountY'] as double;
+    int discountTime = totalPrice ~/ campaign.value[SpecialDiscountValue.specialCampaignThreshold];
+    totalPrice -= discountTime * campaign.value[SpecialDiscountValue.specialCampaignFixedDiscount];
+    totalSeasonal = discountTime * campaign.value[SpecialDiscountValue.specialCampaignFixedDiscount] as double;
     return totalPrice;
   }
 
@@ -156,4 +123,8 @@ class DiscountViewModel {
         return 0;
     }
   }
+
+  void removeDiscountByType(DiscountType type) {
+  campaignApply.removeWhere((discount) => discount.type == type);
+}
 }
