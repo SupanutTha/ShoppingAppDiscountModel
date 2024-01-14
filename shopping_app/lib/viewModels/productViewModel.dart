@@ -43,8 +43,6 @@ class ProductViewModel {
   List<Product> userCart = [];
 
   double calculateGrandTotal(List<Product> cartItems) {
-    print("test cart $cartItems");
-    print('test : ${cartItems.fold(0.0, (sum, item) => sum + (item.price * item.qty))}');
     return cartItems.fold(0.0, (sum, item) => sum + (item.price * item.qty));
   }
 

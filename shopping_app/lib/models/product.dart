@@ -73,4 +73,18 @@ List<Product> products = [
     price: 1500,
     image: "../images/printer.png",
   ),
+  Product(
+    id: 6, 
+    name: "Microwave", 
+    category: ProductCategory.electronics, 
+    qty: 1, 
+    price: 2650, 
+    image: "../images/microwave.webp"),
+  Product(
+    id: 7,
+    name: "Belt", 
+    category: ProductCategory.accessories, 
+    qty: 1, 
+    price: 860, 
+    image: "../images/belt.jpeg")
 ];

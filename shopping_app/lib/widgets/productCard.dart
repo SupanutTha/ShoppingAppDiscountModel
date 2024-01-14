@@ -2,23 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:shopping_app/models/product.dart';
 
 class ProductCard extends StatelessWidget {
-  final Product product;
-  final Function(Product) onTap;
+  final String productName;
+  final ProductCategory productCategory;
+  final String productImage;
+  final double productPrice;
+  final Function() onTap;
 
-  ProductCard({required this.product, required this.onTap});
+  ProductCard({ 
+    required this.onTap, 
+    required this.productName, 
+    required this.productCategory, 
+    required this.productImage, 
+    required this.productPrice});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        onTap(product);
+        onTap();
       },
        child: GridTile(
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.fitHeight,
-              image: AssetImage(product.image),
+              image: AssetImage(productImage),
             ),
           ),
         ),
@@ -26,41 +34,19 @@ class ProductCard extends StatelessWidget {
           color: Colors.black54,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "${product.name} ${product.price}",
-              style: TextStyle(fontSize: 16, color: Colors.white),
+            child: Column(
+              children: [
+                Text(
+                  "${productName}",
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
+                Text(productCategory.title, style: TextStyle(fontSize: 16, color: Colors.white)),
+                Text(productPrice.toString(), style: TextStyle(fontSize: 16, color: Colors.white))
+              ],
             ),
           ),
         ),
       ),
-      // child: Stack(
-      //   children: [
-      //     Container(
-      //       decoration: BoxDecoration(
-      //         image: DecorationImage(
-      //           fit: BoxFit.cover,
-      //           image: AssetImage(product.image),
-      //         ),
-      //       ),
-      //     ),
-          
-          // Positioned.fill(
-          //   child: Align(
-          //     alignment: Alignment.bottomCenter,
-          //     child: Container(
-          //       color: Colors.black54,
-          //       child: Padding(
-          //         padding: const EdgeInsets.all(5.0),
-          //         child: Text(
-          //           "${product.name} ${product.price}",
-          //           style: TextStyle(fontSize: 20, color: Colors.white60),
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-        //],
-      //),
     );
   }
 }

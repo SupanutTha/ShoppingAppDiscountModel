@@ -65,7 +65,7 @@ class _CardCardState extends State<CartCard> {
                   ),
                 ),
                 Expanded(
-                  flex: 2,
+                  flex: 4,
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(

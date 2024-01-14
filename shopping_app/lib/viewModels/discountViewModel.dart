@@ -16,9 +16,9 @@ class DiscountViewModel {
   ProductViewModel productViewModel = ProductViewModel();
 
   double applyDiscount(List<Product> cartItems, List<Discount> campaignList) {
-    double totalPrice = productViewModel.calculateGrandTotal(cartItems);
-    
+
     checkoutCart = productViewModel.deepCopy(cartItems);
+    double totalPrice = productViewModel.calculateGrandTotal(checkoutCart);
     for (var campaign in campaignList) {
 
       switch (campaign.subType) {
@@ -34,7 +34,7 @@ class DiscountViewModel {
           break;
 
         case SubDiscountType.percentageByCategory:
-          totalPrice = applyPercentageByCategoryDiscount(campaign, totalPrice, cartItems);
+          totalPrice = applyPercentageByCategoryDiscount(campaign, totalPrice, checkoutCart);
           break;
 
         case SubDiscountType.points:
@@ -61,12 +61,10 @@ class DiscountViewModel {
 
   double applyPercentageDiscount(Discount campaign,double totalPrice) {
     double beforeDiscountPrice = totalPrice;
-    
     for (var item in checkoutCart) {
       double discountedPrice = item.price * (1 - campaign.value / 100);
       item.price = discountedPrice;
     }
-    
     totalPrice = productViewModel.calculateGrandTotal(checkoutCart);
     totalPercentage = beforeDiscountPrice - totalPrice;
     return totalPrice;
@@ -74,18 +72,14 @@ class DiscountViewModel {
 
   double applyPercentageByCategoryDiscount(Discount campaign, double totalPrice, List<Product> cartItems) {
     double totalDiscountPriceFormPercentage = 0;
-
-
       for (var item in checkoutCart) {
-         print(campaign.value[SpecialDiscountValue.category]);
         if (item.category == campaign.value[SpecialDiscountValue.category]) {
-          totalPrice -= item.price * (campaign.value[SpecialDiscountValue.amount] / 100);
-          totalDiscountPriceFormPercentage +=
-              item.price * item.qty * (campaign.value[SpecialDiscountValue.amount] / 100);
+          totalDiscountPriceFormPercentage += item.price * item.qty * (campaign.value[SpecialDiscountValue.amount] / 100);
         }
+        //totalPrice -=  totalDiscountPriceFormPercentage;
       }
+      totalPrice -=  totalDiscountPriceFormPercentage;
     
-
     totalPercentageCategory = totalDiscountPriceFormPercentage;
     return totalPrice;
 }
@@ -119,8 +113,6 @@ class DiscountViewModel {
         return totalPoints;
       case SubDiscountType.special:
         return totalSeasonal;
-      default:
-        return 0;
     }
   }
 
