@@ -43,8 +43,8 @@ class _CardCardState extends State<CartCard> {
             borderRadius: BorderRadius.circular(borderRadius),
           ),
           child: SizedBox(
-            width: width / 3,
-            height: height / 8,
+            width: width / 3.5,
+            height: height / 7,
             child: Row(
               children: [
                 //image

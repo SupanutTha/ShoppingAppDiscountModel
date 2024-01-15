@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 children: [
                   Expanded( //Product Grid
-                    flex: 3,
+                    flex: 2,
                     child: GridView.builder(
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
@@ -80,7 +80,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           flex: 3,
                           child: Column(
                             children: [
-                              Text("Select Campaign",style:header ,),
                               SizedBox(
                                       height: 10,
                                     ),
