@@ -1,8 +1,7 @@
-# Test Playtorium Discount Module
+# Shopping Discount Module
 ## Description
 
-This Flutter application, built for the Google Chrome platform, is designed to calculate the final price of an order by applying multiple campaigns to items in a shopping cart. The app follows specific rules and campaigns outlined in the assignment.
-
+This Flutter application, built for the Google Chrome platform, is designed to calculate the final price of an order by applying multiple campaigns to items in a shopping cart.
 ## Features
 
 ## 1. Product List
